@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Camera.h"
-#include "Image.h"
 #include "Scene.h"
 
 struct TraceOptions {
@@ -11,6 +10,9 @@ struct TraceOptions {
 };
 
 namespace Tracer {
-	void render(const Camera& camera, const Scene& scene, const TraceOptions& options);
+	// renders image to the given buffer
+	void render(const Camera& camera, const Scene& scene, const TraceOptions& options, unsigned char* buffer);
+
+	// return the color of the traced ray
 	color traceRay(const Scene& scene, const Ray& ray);
 }

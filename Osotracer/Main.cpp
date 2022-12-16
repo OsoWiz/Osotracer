@@ -1,7 +1,7 @@
 #include <iostream>
 #define GLEW_STATIC
 #include "glew/include/GL/glew.h"
-#include "glfw64/include/GLFW/glfw3.h"
+#include "Image.h"
 #include "Tracer.h"
 #include "Camera.h"
 #include "Scene.h"

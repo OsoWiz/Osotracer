@@ -10,3 +10,9 @@ void writePPM(const char* filename, int width, int height, const unsigned char* 
 		ofs << buffer[i];
 	}
 }
+
+void writeGL(int width, int height, const unsigned char* buffer)
+{
+	glDrawPixels(width, height, GL_RGB, GL_UNSIGNED_BYTE, buffer);
+	glFlush();
+}

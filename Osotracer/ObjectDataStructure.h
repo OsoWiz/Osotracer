@@ -24,7 +24,7 @@ public:
 	void addObject(Object* object) override;
 
 	/*
-	* @brief Sets o to the closest object to the ray if one exists.Returns boolean indicating whether the ray hit an object
+	* @brief Sets o to the closest object to the ray if one exists. Returns boolean indicating whether the ray hit an object
 	* @param ray Ray to check for intersection
 	* @param o Object to set to the closest object
 	*/ 

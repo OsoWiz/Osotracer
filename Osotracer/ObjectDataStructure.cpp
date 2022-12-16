@@ -8,6 +8,10 @@ ObjectList::ObjectList()
 
 ObjectList::~ObjectList()
 {
+	for (auto& o : container)
+	{
+		delete o;
+	}
 }
 
 void ObjectList::addObject(Object* object)
