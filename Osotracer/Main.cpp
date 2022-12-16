@@ -35,7 +35,18 @@ int main(void){
         return -1; //something is off
 	
 	// Initialize members required for rendering
-    Camera camera = OrthogonalCamera();
+	Camera* camera = new OrthogonalCamera(glm::vec3(0, 0, 0), glm::vec3(0, 0, 1), glm::vec3(0, 1, 0), 1, 1);
+    Material mat = Material{ {1.0, 0.0, 0.0}, {1.0, 1.0, 0.0}, {1.0, 0.0, 1.0}, 0.5f};
+	Material green = Material{ {0.0, 1.0, 0.0}, {0.f, 1.0, 0.f}, {0.2f, 1.0, 0.2f}, 0.2f };
+	Object* ball = new Sphere(glm::vec3(0, 0, 2), 1, mat);
+	Object* plane = new Plane(glm::vec3(0, 0, 0), glm::vec3(0, 1, 0), mat);
+	ObjectList sceneObjects = ObjectList();
+	sceneObjects.addObject(ball);
+	sceneObjects.addObject(plane);
+	Scene scene = Scene(sceneObjects);
+	
+	
+	// create a test scene with a ball in the middle
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))

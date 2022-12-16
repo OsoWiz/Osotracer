@@ -4,11 +4,12 @@ Camera::Camera(glm::vec3 pos, glm::vec3 dir, glm::vec3 up)
 {
 	right = glm::normalize(glm::cross(dir, up));
 }
+
 PerspectiveCamera::PerspectiveCamera(glm::vec3 pos, glm::vec3 dir, glm::vec3 up, float fov)
 	:Camera(pos, dir, up), tanfov(tan(fov / 2))
 {
 }
-Ray PerspectiveCamera::getRay(glm::vec2 normalizedScreen)
+Ray PerspectiveCamera::getRay(glm::vec2 normalizedScreen) const
 {
 	Ray ray{};
 	ray.origin = pos;
@@ -23,7 +24,7 @@ OrthogonalCamera::OrthogonalCamera(glm::vec3 pos, glm::vec3 dir, glm::vec3 up, f
 {	
 }
 
-Ray OrthogonalCamera::getRay(glm::vec2 normalizedScreen)
+Ray OrthogonalCamera::getRay(glm::vec2 normalizedScreen) const 
 {
 	Ray ray{};
 	glm::vec3 updelta = up * normalizedScreen.y * height;
