@@ -8,4 +8,4 @@
 void writePPM(const char* filename, int width, int height, const unsigned char* buffer);
 
 // write to gl window
-void writeGL(int width, int height, const unsigned char* buffer);
+void writeGL(GLFWwindow* window, const unsigned char* buffer);

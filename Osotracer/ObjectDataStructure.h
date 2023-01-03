@@ -1,6 +1,6 @@
 #pragma once
-# include <vector>
-# include "Ray.h"
+#include <vector>
+#include "Material.h"
 #include "Object.h"
 
 // interface which all ObjectDataStructure classes must implement

@@ -11,8 +11,14 @@ void writePPM(const char* filename, int width, int height, const unsigned char* 
 	}
 }
 
-void writeGL(int width, int height, const unsigned char* buffer)
+void writeGL(GLFWwindow* window, const unsigned char* buffer)
 {
+	GLsizei width, height;
+	// get width and height of the window
+	glfwGetFramebufferSize(window, &width, &height);
+	// clear and draw, then flush and swap
+	glClear(GL_COLOR_BUFFER_BIT);
 	glDrawPixels(width, height, GL_RGB, GL_UNSIGNED_BYTE, buffer);
 	glFlush();
+	glfwSwapBuffers(window);
 }

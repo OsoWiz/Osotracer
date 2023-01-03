@@ -14,6 +14,9 @@ public:
 	~Scene();
 
 	void addObject(Object& object);
+
+	// Get's the hit information of traced ray into the scene
+	HitInfo getHitInfo(const Ray& ray);
 	
 	// creates a scene from specified filepath
 	static Scene fromFile(const std::string& filepath);

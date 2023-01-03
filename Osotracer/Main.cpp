@@ -45,22 +45,21 @@ int main(void){
 	sceneObjects.addObject(plane);
 	Scene scene = Scene(sceneObjects);
 	
-	
-	// create a test scene with a ball in the middle
-
+	// create buffer for image
+	unsigned char* buffer = new unsigned char[windowWidth * windowHeight * 3];
+	TraceOptions options = TraceOptions{ windowWidth, windowHeight, 1 };
+	Tracer::render(* camera, scene, options, buffer);
+    writeGL(window, buffer);
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
-        /* Render here */
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        /* Swap front and back buffers */
-        glfwSwapBuffers(window);
 
         /* Poll for and process events */
         glfwPollEvents();
     }
-
+    // delete image buffer
+	delete[] buffer;
+	
     glfwTerminate();
     return 0;
 

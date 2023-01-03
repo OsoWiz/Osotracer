@@ -1,6 +1,6 @@
 #include "Object.h"
 
-Sphere::Sphere(glm::vec3 pos, float radius, Material material)
+Sphere::Sphere(glm::vec3 pos, float radius, std::shared_ptr<Material> material)
 	:pos(pos), radius(radius), material(material)
 {}
 
@@ -22,12 +22,7 @@ bool Sphere::intersect(const Ray& ray, float& t)
 	return true;
 }
 
-Material Sphere::getMaterial()
-{
-	return Material();
-}
-
-Plane::Plane(glm::vec3 pos, glm::vec3 normal, Material material)
+Plane::Plane(glm::vec3 pos, glm::vec3 normal, std::shared_ptr<Material> material)
 	:pos(pos), normal(normal), material(material)
 {
 }
@@ -44,7 +39,3 @@ bool Plane::intersect(const Ray& ray, float& t)
 	return true;
 }
 
-Material Plane::getMaterial()
-{
-	return material;
-}
