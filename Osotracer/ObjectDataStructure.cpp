@@ -19,26 +19,26 @@ void ObjectList::addObject(Object* object)
 	container.push_back(object);
 }
 
-bool ObjectList::getClosestObject(const Ray& ray, Object& o)
+bool ObjectList::getClosestObjectHit(const Ray& ray, Object& o, HitInfo& hit)
 {
 	bool succ = false;
 	// Initialize to first object
 	if (container.size() == 0)
 		return succ;
 	
-	float shortestHit = std::numeric_limits<float>::max();
-	
+	hit.t = std::numeric_limits<float>::max();
 	
 	for (size_t i = 0; i < container.size(); i++) {
-		float dist = 0.f;
+		HitInfo newhit;
 		// if no intersection happened, continue
-		if (!container[i]->intersect(ray, dist))
+		if (!container[i]->intersect(ray, newhit))
 			continue;
 		
-		if (dist < shortestHit)
+		if (newhit.t < hit.t)
 		{
-			shortestHit = dist;
-			//o = container[i]; error
+			hit = newhit; // Check if this copy actually works. Should work in theory
+			o = *container[i];
+			succ = true;
 		}
 		
 	}

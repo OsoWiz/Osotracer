@@ -9,7 +9,7 @@ class ObjectDataStructure
 public:
 	virtual void addObject(Object* object) = 0;
 	
-	virtual bool getClosestObject(const Ray& ray, Object& o) = 0;
+	virtual bool getClosestObjectHit(const Ray& ray, Object& o, HitInfo& hit) = 0;
 	
 };
 
@@ -28,7 +28,8 @@ public:
 	* @param ray Ray to check for intersection
 	* @param o Object to set to the closest object
 	*/ 
-	bool getClosestObject(const Ray& ray, Object& o) override;
+	bool getClosestObjectHit(const Ray& ray, Object& o, HitInfo& hit) override;
+	
 	
 private:
 	std::vector<Object*> container;

@@ -31,7 +31,10 @@ Metal::Metal(float shininess, float fuzziness)
 
 bool Metal::Scatter(const Ray& in, glm::vec3 normal, ScatterInfo& scatterInfo) const
 {
-	scatterInfo.attenuation *= shininess;
-	scatterInfo.scattered.direction = glm::reflect(in.direction, normal);
-	return false;
+	Ray scatter;
+	for (int i = 0; i < scatterInfo.numScatteredRays; i++) {
+		scatter.direction = glm::reflect(in.direction, normal);
+		*scatterInfo.scatteredRays = scatter;
+	}
+	return true;
 }

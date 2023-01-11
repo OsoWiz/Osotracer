@@ -5,12 +5,14 @@
 #include "Colors.h"
 
 struct ScatterInfo {
-	Ray scattered;
-	Colors::floatColor attenuation; // attenuation of the ray
+	Ray* scatteredRays;
+	int numScatteredRays;
+	Ray shadow;
+	float attenuation = 0.f;
 };
 
 /**
-* @brief Material interface. Materials do not have a color.
+* @brief Material interface. Materials describe how light reflects off them
 */
 class Material {	
 public:
