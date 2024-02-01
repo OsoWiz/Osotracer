@@ -1,35 +1,109 @@
 #include "Tracer.h"
+#include <algorithm>
 
-void Tracer::render(const Camera& camera, const Scene& scene, const TraceOptions& options, unsigned char* buffer)
+// helper functions
+inline bool axisComparison(glm::vec3 first, glm::vec3 second, Axis axis)
 {
-	for (size_t y = 0; y < options.height; y++)
-	{
-		for (size_t x = 0; x < options.width; x++)
+	return first[axis] < second[axis];
+}
+/**
+ * @brief Returns the longest axis of the given dimensions
+ * @param dimensions of the bounding box
+ * @return longest axis
+*/
+inline Axis longestAxis(glm::vec3 dimensions)
+{
+	Axis axis = Axis::X;
+	if (dimensions[axis] < dimensions.y) // is there a faster way?
+		axis = Axis::Y;
+	if (dimensions[axis] < dimensions.z)
+		axis = Axis::Z;
+	return axis;
+}
+
+inline float sahCost(const AABB& box, size_t count)
+{
+	return box.area() * count;
+}
+
+template <typename VertexType>
+inline size_t splitMedian(const std::vector<Triangle<VertexType>>& triangles, uint32_t* indices, const size_t start, const size_t end)
+{
+	// find longest axis
+	glm::vec3 dimensions = triangles[start].getBoundingBox().getDimensions();
+	Axis axis = longestAxis(dimensions);
+
+	// partition triangles by axis
+	size_t median = std::partition(indices + start, indices + end, [&](uint32_t a, uint32_t b)
 		{
-			Ray ray = camera.getRay(glm::vec2(x, y));
-			int startDepth = int(options.maxDepth);
-			Colors::color c = Tracer::traceRayRecursive(scene, ray, startDepth); // TODO get hit information or smth and use sampler
-			
-			// write to the buffer
-			buffer[(y * options.width + x) * 3 + 0] = c.r;
-			buffer[(y * options.width + x) * 3 + 1] = c.g;
-			buffer[(y * options.width + x) * 3 + 2] = c.b;
+			return axisComparison(triangles[a].centroid(), triangles[b].centroid(), axis);
+		});
+
+
+	return median;
+}
+
+template <typename VertexType>
+inline size_t splitSAH(const std::vector<Triangle<VertexType>>& triangles, uint32_t* indices, const size_t start, const size_t end)
+{
+	// sample potential split points
+	return 0;
+}
+
+template <typename VertexType>
+void recursiveSplitRoutine(const std::vector<Triangle<VertexType>>& triangles, SplitFunc<VertexType> splitFunction, std::unique_ptr<BVHNode> node, const uint32_t leafObjectCount, uint32_t* indices, const size_t start, const size_t end)
+{
+	// Bounding box is always calculated for that node.
+	glm::vec3 min = glm::vec3(std::numeric_limits<float>::max());
+	glm::vec3 max = glm::vec3(std::numeric_limits<float>::min());
+	for (size_t i = start; i < end; i++)
+	{
+		min = glm::min(min, triangles[i].min());
+		max = glm::max(max, triangles[i].max());
+	}
+	node->aabb = AABB(min, max);
+
+	if (end - start < leafObjectCount)
+		return;
+
+	// split
+	size_t split = splitFunction(triangles, indices, start, end);
+	node->left = std::make_unique<BVHNode>();
+	node->right = std::make_unique<BVHNode>();
+	recursiveSplitRoutine(triangles, splitFunction, node->left, leafObjectCount, indices, start, split);
+	recursiveSplitRoutine(triangles, splitFunction, node->right, leafObjectCount, indices, split, end);
+
+}
+
+// tracer functionality
+template<typename VertexType>
+void BVHTreeRayTracer<VertexType>::buildBVH(const std::vector<Triangle<VertexType>>& triangles, BVHBuildMethod buildMethod, const uint32_t leafObjectCount)
+{
+	m_root = std::make_unique<BVHNode>();
+	switch (buildMethod)
+	{
+		case SAH:
+		{
+			recursiveSplitRoutine(triangles, splitSAH, leafObjectCount, m_indices, 0, triangles.size());
+			break;
 		}
+		case Median:
+		{
+			recursiveSplitRoutine(triangles, splitMedian, leafObjectCount, m_indices, 0, triangles.size());
+			break;
+		}
+		default:
+			break;
+	}
+	// copy the triangles according to sorted indices
+	for (size_t i = 0; i < triangles.size(); i++)
+	{
+		m_triangles.push_back(triangles[m_indices[i]]);
 	}
 }
 
-Colors::color Tracer::traceRay(const Scene& scene, const Ray& ray, int depth)
+template<typename VertexType>
+std::optional<HitInfo> BVHTreeRayTracer<VertexType>::TraceRay(const Ray& ray, const float tMax)
 {
-	// Do tracing
-	
-	
-	
-	return Colors::color{ 255, 0, 0 };
-}
-
-Colors::color Tracer::traceRayRecursive(const Scene& scene, const Ray& ray, int depth)
-{
-
-	
-	return Colors::color();
+	return std::optional<HitInfo>();
 }
