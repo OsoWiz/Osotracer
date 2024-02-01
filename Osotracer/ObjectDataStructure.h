@@ -27,6 +27,13 @@ public:
 	// Objects can only be added. Removing objects is not implemented yet
 	void addObject(Object* object) override;
 
+	/*
+	* @brief Sets o to the closest object to the ray if one exists. Returns boolean indicating whether the ray hit an object
+	* @param ray Ray to check for intersection
+	* @param o Object to set to the closest object
+	*/
+	bool getClosestObject(const Ray& ray, Object& o) override;
+
 private:
 	std::vector<Object*> container;
 };

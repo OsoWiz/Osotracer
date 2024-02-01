@@ -58,8 +58,7 @@ public:
 	 * @param material of the sphere
 	*/
 	Sphere(glm::vec3 pos, float radius, std::shared_ptr<Material> material);
-	HitInfo intersect(const Ray& ray, const glm::vec3 invD, float& t, const float tMax = T_MISS) override;
-	bool intersectT(const Ray& ray, float& t, const float tMax = T_MISS) override;
+	bool intersect(const Ray& ray, float& t) override;
 
 private:
 	float radius;
@@ -69,8 +68,7 @@ class Plane : public Object, public Shape
 {
 public:
 	Plane(glm::vec3 pos, glm::vec3 normal, std::shared_ptr<Material> material);
-	bool intersectT(const Ray& ray, float& t, const float tMax = T_MISS) override;
-	HitInfo intersect(const Ray& ray, const glm::vec3 invD, float& t, const float tMax = T_MISS) override;
+	bool intersect(const Ray& ray, float& t) override;
 
 private:
 	glm::vec3 normal;

@@ -4,7 +4,7 @@ Sphere::Sphere(glm::vec3 pos, float radius, std::shared_ptr<Material> material)
 	:Object(pos, material), radius(radius)
 {}
 
-HitInfo Sphere::intersect(const Ray& ray, const glm::vec3 invD, float& t, const float tMax)
+bool Sphere::intersect(const Ray& ray, float& t)
 {
 	return HitInfo();
 }
